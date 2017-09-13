@@ -14,8 +14,10 @@ public class PunchScript : MonoBehaviour {
 	}
 
 	void CheckPunch() {
+		GlobalScript.p1Punching = false;
 		if (Input.GetKeyDown (KeyCode.M)) {
 			this.GetComponent<Animator>().SetTrigger("Punch");
+			GlobalScript.p1Punching = true;
 		}
 	}
 }
