@@ -5,13 +5,20 @@ public class PlayerScript : MonoBehaviour {
 
 	public float speed;
 	public float jumpForce;
+	public float maxGravDist = 4.0f;
+	public float maxGravity = 35.0f;
 
 	private bool isRight = true;
 	private bool isWalking = false;
+	private Vector3 attractionDir;
+
+	private GameObject[] planets;
+
 
 	// Use this for initialization
 	void Start () {
-		
+		planets = GameObject.FindGameObjectsWithTag("Planet");
+		Debug.Log ("found " + planets.Length + "planet(s)");
 	}
 	
 	// Update is called once per frame
@@ -20,6 +27,22 @@ public class PlayerScript : MonoBehaviour {
 		CheckAnim ();
 		GlobalScript.playerIsRight = this.isRight;
 		GlobalScript.playerX = this.transform.position.x;
+		if (this.isWalking || !GlobalScript.isGrounded)
+			this.transform.GetComponent<Rigidbody2D> ().freezeRotation = false;
+		else
+			this.transform.GetComponent<Rigidbody2D> ().freezeRotation = true;
+	}
+
+	void FixedUpdate () {
+		foreach(var planet in planets) {
+			var dist = Vector3.Distance(planet.transform.position, transform.position);
+			if (dist <= maxGravDist) {
+				var v = planet.transform.position - transform.position;
+				this.attractionDir = v;
+				var rigidbody2D = this.transform.GetComponent<Rigidbody2D>();
+				rigidbody2D.AddForce(v.normalized * (1.0f - dist / maxGravDist) * maxGravity);
+			}
+		}
 	}
 
 	void CheckMovements(){
@@ -37,7 +60,7 @@ public class PlayerScript : MonoBehaviour {
 			this.transform.Translate (Vector2.right * speed);
 			this.isRight = true;
 		} else if (Input.GetKeyDown (KeyCode.Z) && GlobalScript.isGrounded) {
-			this.GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpForce);
+			this.GetComponent<Rigidbody2D> ().AddForce (-this.attractionDir * jumpForce);
 		}
 	}
 
