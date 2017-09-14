@@ -44,5 +44,6 @@ public class PlayerScript : MonoBehaviour {
 	void CheckAnim(){
 		this.transform.GetComponent<Animator> ().SetBool ("isWalking", this.isWalking);
 		this.transform.GetComponent<Animator> ().SetBool ("isPunching", GlobalScript.p1Punching);
+		this.transform.GetComponent<Animator> ().SetBool ("isJumping", !GlobalScript.isGrounded);
 	}
 }

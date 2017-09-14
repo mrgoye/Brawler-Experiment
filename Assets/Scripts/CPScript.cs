@@ -8,7 +8,6 @@ public class CPScript : MonoBehaviour {
 
 	private float damages = 0;
 	private bool isLeft = true; 
-	private Vector2 previousVel;
 	private bool isUnderForce = false;
 
 	// Use this for initialization
@@ -49,7 +48,6 @@ public class CPScript : MonoBehaviour {
 	void CheckRecoilFromHit(){
 		var direction = GlobalScript.playerIsRight ? 1 : -1;
 		this.GetComponent<Rigidbody2D>().AddForce(direction * Vector2.right * (damages * 2));
-		previousVel = this.transform.GetComponent<Rigidbody2D> ().velocity;
 	}
 
 	void CheckAI(){
