@@ -7,14 +7,11 @@ public class GlobalScript : MonoBehaviour {
 	public float distance;
 
 	public static bool isGrounded;
+	public static bool hasLanded;
 	public static bool playerIsRight;
 	public static float playerX;
 	public static bool p1Punching = false;
-
-	public static float headX;
-	public static float headY;
-	public static float footX;
-	public static float footY;
+	public static bool hasEnteredSS = false;	
 
 	// Use this for initialization
 	void Start () {

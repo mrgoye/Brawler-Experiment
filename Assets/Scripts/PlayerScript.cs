@@ -13,8 +13,7 @@ public class PlayerScript : MonoBehaviour {
 	private Vector3 attractionDir;
 
 	private GameObject[] planets;
-
-
+	
 	// Use this for initialization
 	void Start () {
 		planets = GameObject.FindGameObjectsWithTag("Planet");
@@ -23,14 +22,23 @@ public class PlayerScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		CheckMovements ();
-		CheckAnim ();
-		GlobalScript.playerIsRight = this.isRight;
-		GlobalScript.playerX = this.transform.position.x;
-		if (this.isWalking || !GlobalScript.isGrounded)
-			this.transform.GetComponent<Rigidbody2D> ().freezeRotation = false;
-		else
-			this.transform.GetComponent<Rigidbody2D> ().freezeRotation = true;
+		if (!GlobalScript.hasEnteredSS) {
+			CheckMovements ();
+			CheckAnim ();
+			GlobalScript.playerIsRight = this.isRight;
+			GlobalScript.playerX = this.transform.position.x;
+			if (this.isWalking || !GlobalScript.isGrounded)
+				this.transform.GetComponent<Rigidbody2D> ().freezeRotation = false;
+			else
+				this.transform.GetComponent<Rigidbody2D> ().freezeRotation = true;
+		} else {
+			this.GetComponent<BoxCollider2D>().enabled = false;
+			this.GetComponent<Animator>().enabled = false;
+			this.GetComponent<SpriteRenderer>().enabled = false;
+			var ss = GameObject.FindGameObjectWithTag("Spaceship");
+			this.transform.parent = ss.transform;
+			this.transform.position = this.transform.parent.position;
+		}
 	}
 
 	void FixedUpdate () {
@@ -68,5 +76,5 @@ public class PlayerScript : MonoBehaviour {
 		this.transform.GetComponent<Animator> ().SetBool ("isWalking", this.isWalking);
 		this.transform.GetComponent<Animator> ().SetBool ("isPunching", GlobalScript.p1Punching);
 		this.transform.GetComponent<Animator> ().SetBool ("isJumping", !GlobalScript.isGrounded);
-	}
+	}		
 }
